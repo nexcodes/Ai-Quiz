@@ -4,8 +4,7 @@ generator client {
 
 datasource db {
   provider = "cockroachdb"
-  url      = env("DATABASE_URL")
-
+  url      = "postgresql://nexcodes:A86S65V7_Q0JAnQj2ulOZw@ai-quiz-5426.6xw.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full"
 }
 
 model Account {
@@ -45,4 +44,38 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  Game          Game[]
+}
+
+enum GameType {
+  mcq
+  open_ended
+}
+
+model Game {
+  id        String     @id @default(cuid())
+  userId    String
+  timeStarted DateTime
+  topic     String
+  timeEnded DateTime?
+  gameType  GameType
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questions  Question[]
+
+  @@index([userId], name: "userId")
+}
+
+model Question {
+  id                String   @id @default(cuid())
+  question          String
+  answer            String
+  gameId            String
+  options           Json? // for mcq question
+  percentageCorrect Float? // for open ended questions
+  isCorrect         Boolean?
+  questionType      GameType
+  userAnswer        String?
+  game              Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@index([gameId], name: "gameId")
 }
