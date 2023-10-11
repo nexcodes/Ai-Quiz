@@ -59,5 +59,13 @@ export async function POST(req: Request, res: Response) {
         }
       );
     }
+      return NextResponse.json(
+        {
+          message: error,
+        },
+        {
+          status: 400,
+        }
+      );
   }
 }
