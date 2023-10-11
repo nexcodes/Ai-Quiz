@@ -1,12 +1,13 @@
 import { prisma } from "@/lib/db";
+import { checkAnswerSchema } from "@/schemas/questions";
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 import stringSimilarity from "string-similarity";
-import { checkAnswerType } from "@/types/questions";
+
 export async function POST(req: Request, res: Response) {
   try {
     const body = await req.json();
-    const { questionId, userInput } = checkAnswerType.parse(body);
+    const { questionId, userInput } = checkAnswerSchema.parse(body);
     const question = await prisma.question.findUnique({
       where: { id: questionId },
     });
@@ -48,6 +49,10 @@ export async function POST(req: Request, res: Response) {
         percentageSimilar,
       });
     }
+
+    return NextResponse.json({
+      message: "Failed"
+    })
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(
@@ -59,9 +64,9 @@ export async function POST(req: Request, res: Response) {
         }
       );
     }
-      return NextResponse.json(
+    return NextResponse.json(
         {
-          message: error,
+          message: error.issues,
         },
         {
           status: 400,
