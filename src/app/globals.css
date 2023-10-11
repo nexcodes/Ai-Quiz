@@ -74,3 +74,32 @@
     @apply bg-background text-foreground;
   }
 }
+
+svg text {
+  cursor: pointer;
+}
+
+.custom-scrollbar{
+  animation-duration: 150ms;
+}
+
+/* width */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  border-radius: .25rem;
+}
+
+/* Track */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: hsl(var(--border));
+}
+
+/* Handle */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+}
+
+/* Handle on hover */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary-foreground));
+}

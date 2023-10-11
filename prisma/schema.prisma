@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "cockroachdb"
-  url      = "postgresql://nexcodes:A86S65V7_Q0JAnQj2ulOZw@ai-quiz-5426.6xw.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full"
+  url      = env("DATABASE_URL")
 }
 
 model Account {
@@ -65,6 +65,11 @@ model Game {
   @@index([userId], name: "userId")
 }
 
+model topic_count {
+  id    String @id @default(cuid())
+  topic String @unique
+  count Int
+}
 model Question {
   id                String   @id @default(cuid())
   question          String

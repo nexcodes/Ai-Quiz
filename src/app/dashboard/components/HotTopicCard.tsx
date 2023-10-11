@@ -1,23 +1,37 @@
-import CustomWordCount from '@/components/CustomWordCount'
-import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card'
-import React from 'react'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import React from "react";
+import { prisma } from "@/lib/db";
+import CustomWordCount from "@/components/CustomWordCount";
 
-type Props = {}
+type Props = {};
 
-const HotTopicCard = (props: Props) => {
+const HotTopicCard = async (props: Props) => {
+  const topics = await prisma.topic_count.findMany({});
+  const formattedTopics = topics.map((topic) => {
+    return {
+      text: topic.topic,
+      value: topic.count,
+    };
+  });
   return (
-    <Card className='col-span-4'>
-        <CardHeader className='text-2xl font-bold'>Hot Topic</CardHeader>
+    <Card className="col-span-4">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold">Hot Topics</CardTitle>
         <CardDescription>
-            Click on a topic to start a quiz on it!
+          Click on a topic to start a quiz on it.
         </CardDescription>
-
-        <CardContent className='pl-2'>
-            <CustomWordCount />
-        </CardContent>
-
+      </CardHeader>
+      <CardContent className="pl-2">
+        <CustomWordCount formattedTopics={formattedTopics} />
+      </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default HotTopicCard
+export default HotTopicCard;

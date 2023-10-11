@@ -3,7 +3,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Navbar from "@/components/Design/Navbar/Navbar";
-import { ThemeProvider } from "@/components/ThemeProvider";
+import Providers from "@/components/Providers";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,15 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(inter.className, "antialiased min-h-screen pt-16")}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <Providers>
           <Navbar />
           {children}
-        </ThemeProvider>
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );
