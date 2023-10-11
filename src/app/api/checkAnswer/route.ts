@@ -33,7 +33,7 @@ export async function POST(req: Request, res: Response) {
         data: { isCorrect },
       });
       return NextResponse.json({
-        isCorrect,
+        isCorrect: isCorrect
       });
     } else if (question.questionType === "open_ended") {
       let percentageSimilar = stringSimilarity.compareTwoStrings(
@@ -46,7 +46,7 @@ export async function POST(req: Request, res: Response) {
         data: { percentageCorrect: percentageSimilar },
       });
       return NextResponse.json({
-        percentageSimilar,
+        percentageSimilar: percentageSimilar
       });
     }
 
