@@ -1,13 +1,12 @@
 import { prisma } from "@/lib/db";
-import { checkAnswerSchema } from "@/schemas/questions";
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 import stringSimilarity from "string-similarity";
-
+import { checkAnswerType } from "@/types/questions";
 export async function POST(req: Request, res: Response) {
   try {
     const body = await req.json();
-    const { questionId, userInput } = checkAnswerSchema.parse(body);
+    const { questionId, userInput } = checkAnswerType.parse(body);
     const question = await prisma.question.findUnique({
       where: { id: questionId },
     });
@@ -33,7 +32,7 @@ export async function POST(req: Request, res: Response) {
         data: { isCorrect },
       });
       return NextResponse.json({
-        isCorrect: isCorrect
+        isCorrect,
       });
     } else if (question.questionType === "open_ended") {
       let percentageSimilar = stringSimilarity.compareTwoStrings(
@@ -46,13 +45,9 @@ export async function POST(req: Request, res: Response) {
         data: { percentageCorrect: percentageSimilar },
       });
       return NextResponse.json({
-        percentageSimilar: percentageSimilar
+        percentageSimilar,
       });
     }
-
-    return NextResponse.json({
-      message: "Failed"
-    })
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(
@@ -64,13 +59,5 @@ export async function POST(req: Request, res: Response) {
         }
       );
     }
-    return NextResponse.json(
-        {
-          message: error.issues,
-        },
-        {
-          status: 400,
-        }
-      );
   }
 }
