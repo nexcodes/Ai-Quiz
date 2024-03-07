@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 import stringSimilarity from "string-similarity";
 import { checkAnswerType } from "@/types/questions";
+
 export async function POST(req: Request, res: Response) {
   try {
     const body = await req.json();
@@ -30,7 +31,6 @@ export async function POST(req: Request, res: Response) {
     });
 
     if (question.questionType === "mcq") {
-
       const isCorrect =
         question.answer.toLowerCase().trim() === userInput.toLowerCase().trim();
 
@@ -42,9 +42,9 @@ export async function POST(req: Request, res: Response) {
       return NextResponse.json({
         isCorrect,
       });
+    }
 
-    } else if (question.questionType === "open_ended") {
-
+    if (question.questionType === "open_ended") {
       let percentageSimilar = stringSimilarity.compareTwoStrings(
         question.answer.toLowerCase().trim(),
         userInput.toLowerCase().trim()
@@ -60,13 +60,10 @@ export async function POST(req: Request, res: Response) {
       return NextResponse.json({
         percentageSimilar,
       });
-
     }
-
     return NextResponse.json({
-      message: "Question type not found",
+      message: "Success!",
     });
-    
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json(
@@ -78,5 +75,8 @@ export async function POST(req: Request, res: Response) {
         }
       );
     }
+    return NextResponse.json({
+      message: "Something went wrong! Please try again later.",
+    });
   }
 }
