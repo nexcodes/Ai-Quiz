@@ -1,4 +1,4 @@
-import { strict_output } from "@/lib/gpt";
+import { strict_output } from "@/lib/gemini";
 // import { getAuthSession } from "@/lib/nextauth";
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
