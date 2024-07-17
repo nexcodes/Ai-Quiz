@@ -21,7 +21,7 @@ const HistoryCard = (props: Props) => {
       </CardHeader>
       <CardContent>
         <p className="text-sm text-muted-foreground">
-          View your past quiz results and see how you've improved!
+          {"View your past quiz results and see how you've improved!"}
         </p>
       </CardContent>
     </Card>
