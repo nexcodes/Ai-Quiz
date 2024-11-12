@@ -29,6 +29,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import LoadingQuestions from "./LoadingQuestions";
+import { toast } from "@/components/ui/use-toast";
 
 type Props = {
   topicParam: string;
@@ -71,8 +72,16 @@ const QuizCreation = ({ topicParam }: Props) => {
         type: input.type,
       },
       {
-        onSuccess: ({ gameId }) => {
+        onSuccess: (props) => {
           setFinished(true);
+
+          if ("error" in props) {
+            toast({
+              title: props.error,
+            });
+          }
+
+          const { gameId } = props;
 
           setTimeout(() => {
             if (form.getValues("type") === "open_ended") {

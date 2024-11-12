@@ -13,13 +13,14 @@ export async function strict_output(
   output_format: OutputFormat,
   default_category: string = "",
   output_value_only: boolean = false,
-  num_tries: number = 3,
+  num_tries: number = 6,
   verbose: boolean = false
 ): Promise<
-  {
-    question: string;
-    answer: string;
-  }[]
+  | {
+      question: string;
+      answer: string;
+    }[]
+  | { error: string }
 > {
   // if the user input is in a list, we also process the output as a list of json
   const list_input: boolean = Array.isArray(user_prompt);
@@ -79,8 +80,6 @@ export async function strict_output(
     });
     const response = await result.response;
     const text = response.text();
-
-    console.log(text, "GEMINI_TEXT");
 
     let res: string = text?.replace(/'/g, '"') ?? "";
 
@@ -157,5 +156,8 @@ export async function strict_output(
     }
   }
 
-  return [];
+  console.log(error_msg)
+  return {
+    error: error_msg,
+  };
 }

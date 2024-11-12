@@ -18,7 +18,7 @@ export async function POST(req: Request, res: Response) {
     const { amount, topic, type } = getQuestionsType.parse(body);
     let questions: any;
     if (type === "open_ended") {
-      questions = await strict_output(
+      const result = await strict_output(
         "You are a helpful AI that is able to generate a pair of question and answers, the length of each answer should not be more than 15 words, store all the pairs of answers and questions in a JSON array",
         new Array(amount).fill(
           `You are to generate a random hard open-ended questions about ${topic}`
@@ -28,8 +28,19 @@ export async function POST(req: Request, res: Response) {
           answer: "answer with max length of 15 words",
         }
       );
+
+      if ("error" in result) {
+        return NextResponse.json(
+          { error: result.error },
+          {
+            status: 400,
+          }
+        );
+      }
+
+      questions = result;
     } else if (type === "mcq") {
-      questions = await strict_output(
+      const result = await strict_output(
         "You are a helpful AI that is able to generate mcq questions and answers, the length of each answer should not be more than 15 words, store all answers and questions and options in a JSON array",
         new Array(amount).fill(
           `You are to generate a random hard mcq question about ${topic}`
@@ -42,7 +53,19 @@ export async function POST(req: Request, res: Response) {
           option3: "option3 with max length of 15 words",
         }
       );
+
+      if ("error" in result) {
+        return NextResponse.json(
+          { error: result.error },
+          {
+            status: 400,
+          }
+        );
+      }
+
+      questions = result;
     }
+
     return NextResponse.json(
       {
         questions: questions,

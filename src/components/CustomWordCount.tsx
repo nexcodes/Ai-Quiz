@@ -10,7 +10,7 @@ type Props = {
 };
 
 const CustomWordCount = ({ formattedTopics }: Props) => {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const router = useRouter();
 
   const fontSizeMapper = (word: { value: number }) => {
@@ -18,18 +18,18 @@ const CustomWordCount = ({ formattedTopics }: Props) => {
   };
 
   return (
-      <D3WordCloud
-        data={formattedTopics}
-        height={550}
-        font="Times"
-        fontSize={fontSizeMapper}
-        rotate={0}
-        padding={10}
-        fill={theme === "dark" ? "white" : "black"}
-        onWordClick={(e, d) => {
-          router.push("/quiz?topic=" + d.text);
-        }}
-      />
+    <D3WordCloud
+      data={formattedTopics}
+      height={550}
+      font="Times"
+      fontSize={fontSizeMapper}
+      rotate={0}
+      padding={10}
+      fill={resolvedTheme === "dark" ? "white" : "black"}
+      onWordClick={(e, d) => {
+        router.push("/quiz?topic=" + d.text);
+      }}
+    />
   );
 };
 

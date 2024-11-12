@@ -18,6 +18,22 @@ export async function POST(req: Request, res: Response) {
     }
     const body = await req.json();
     const { topic, type, amount } = quizCreationType.parse(body);
+
+    const { data } = await axios.post(
+      `${process.env.API_URL as string}/api/questions`,
+      {
+        amount,
+        topic,
+        type,
+      }
+    );
+
+    console.log(data , "__56");
+
+    if ("error" in data) {
+      return NextResponse.json({ error: data.error }, { status: 400 });
+    }
+
     const game = await prisma.game.create({
       data: {
         gameType: type,
@@ -40,15 +56,6 @@ export async function POST(req: Request, res: Response) {
         },
       },
     });
-
-    const { data } = await axios.post(
-      `${process.env.API_URL as string}/api/questions`,
-      {
-        amount,
-        topic,
-        type,
-      }
-    );
 
     if (type === "mcq") {
       type mcqQuestion = {
