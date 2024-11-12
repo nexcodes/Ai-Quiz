@@ -4,14 +4,12 @@ import HistoryCard from "./components/HistoryCard";
 import HotTopicCard from "./components/HotTopicCard";
 import RecentActivities from "./components/RecentActivities";
 
-type Props = {};
-
 export const metadata = {
   title: "Dashboard / AI Quiz App",
   description: "Dashboard",
 };
 
-const Dashboard = (props: Props) => {
+export default function Dashboard() {
   return (
     <main className="p-8 mx-auto max-w-7xl">
       <div className="flex items-center">
@@ -27,6 +25,4 @@ const Dashboard = (props: Props) => {
       </div>
     </main>
   );
-};
-
-export default Dashboard;
+}

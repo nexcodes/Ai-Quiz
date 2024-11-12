@@ -28,8 +28,6 @@ export async function POST(req: Request, res: Response) {
       }
     );
 
-    console.log(data , "__56");
-
     if ("error" in data) {
       return NextResponse.json({ error: data.error }, { status: 400 });
     }
@@ -42,6 +40,7 @@ export async function POST(req: Request, res: Response) {
         topic,
       },
     });
+
     await prisma.topic_count.upsert({
       where: {
         topic,
@@ -112,14 +111,13 @@ export async function POST(req: Request, res: Response) {
           status: 400,
         }
       );
-    } else {
-      return NextResponse.json(
-        { error: "An unexpected error occurred." },
-        {
-          status: 500,
-        }
-      );
     }
+    return NextResponse.json(
+      { error: "An unexpected error occurred." },
+      {
+        status: 500,
+      }
+    );
   }
 }
 export async function GET(req: Request, res: Response) {
